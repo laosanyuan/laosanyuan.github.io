@@ -2,7 +2,7 @@
 title: C# Record使用介绍
 date: 2021-12-14 23:10:00
 tags:
-  - c#
+  - C#
   - .Net
 ---
 

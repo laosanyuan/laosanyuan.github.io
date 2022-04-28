@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="google-site-verification" content="cWRKvD_1O595kByrLPLUCxQIUnBSDzhxLg0j0kmgEL4" />
+    <meta name="baidu-site-verification" content="code-c6ersgmcTV" />
+    <meta name="sogou_site_verification" content="RbqtFq8FjJ"/>
+    <meta name="msvalidate.01" content="8566932EE034C98204A72F34E44A503A" />
+    <meta name="description" content="nullIOC和DI IOC，全称Inversion of Control，即“控制反转”，是一种设计原则。而DI（Dependency injection）指“依赖注入”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。 请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DryIOC使用介绍">
+<meta property="og:url" content="https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="刀不卷刃">
+<meta property="og:description" content="nullIOC和DI IOC，全称Inversion of Control，即“控制反转”，是一种设计原则。而DI（Dependency injection）指“依赖注入”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。 请">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-10T14:58:50.000Z">
+<meta property="article:modified_time" content="2022-04-28T15:34:54.782Z">
+<meta property="article:author" content="一刀">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content=".Net">
+<meta property="article:tag" content="IOC">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>DryIOC使用介绍</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2022/04/12/C-%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E4%BD%BF%E7%94%A8%E7%AE%80%E4%BB%8B/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2021/12/28/C-%E4%B8%AD%E7%9A%84%E8%A7%A3%E6%9E%84-Deconstruct/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&text=DryIOC使用介绍"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&is_video=false&description=DryIOC使用介绍"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DryIOC使用介绍&body=Check out this article: https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&name=DryIOC使用介绍&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&t=DryIOC使用介绍"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC%E5%92%8CDI"><span class="toc-number">1.</span> <span class="toc-text">nullIOC和DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">null.Net开发中常用的IOC容器框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DryIOC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">nullDryIOC使用方法</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        DryIOC使用介绍
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">一刀</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-04-10T14:58:50.000Z" itemprop="datePublished">2022-04-10</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Net/" rel="tag">.Net</a>, <a class="tag-link-link" href="/tags/C/" rel="tag">C#</a>, <a class="tag-link-link" href="/tags/IOC/" rel="tag">IOC</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="IOC和DI"><a class="header-anchor" href="#IOC和DI">null</a>IOC和DI</h2>
+<p>IOC，全称Inversion of Control，即“<strong>控制反转</strong>”，是一种<strong>设计原则</strong>。而DI（Dependency injection）指“<strong>依赖注入</strong>”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。</p>
+<p>请看下面这个例子：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">A</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Description &#123; <span class="keyword">get</span>; &#125; = <span class="string">&quot;I am A&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">B</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> A A &#123; <span class="keyword">get</span>; <span class="keyword">init</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span>(<span class="params">A a</span>)</span></span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">this</span>.A = a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetDescription</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> A.Description;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们需要 一个B对象，需要 怎么做呢？肯定是先创建一个A对象，因为B的创建需要A作为参数，然后才可以正常的使用B处理我们的业务：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">B b = <span class="keyword">new</span> B(<span class="keyword">new</span> A());</span><br></pre></td></tr></table></figure>
+<p>但是是只需要一个依赖的情况，如果B还需要另一个依赖C呢，甚至在A的创建过程中还需要一个依赖D呢，这个链延续下去是不是就会很长，在每次创建B之前都需要一系列的前期准备工作，无疑是十分不便的。如果有一个办法可以简化这个繁琐的前期工作，那编码的过程必将是十分愉快的，依赖注入正是达到了这个效果。在依赖注入的使用中，创建B只需要一步。但是B仍然不能脱离对A、C、D等单独存在，只不过是将对它们的创建改为了“注册”，这种注册是不需要知道先后顺序以及依赖关系的。最终对于B的创建，所有的依赖顺序和创建都由IOC容器来负责，用户需要做的是告诉容器“我需要一个B”。后面会涉及具体写法，此处不举例。</p>
+<p>回看“依赖注入”这个名字来看，到底什么叫控制反转呢？什么被控制了？什么被反转了？</p>
+<p>很显然，B对象的创建被控制了，实例的出现并不经new得到而是交由IOC容器给出，这个过程是为被控制。而创建依赖对象的权利反转了。在常规的写法中依赖的创建过程由用户使用者所有，而引入IOC容器后，依赖对象的创建则完全脱离变为由容器管理，使用者变为被动等待，是为反转。</p>
+<p>依赖注入的使用，主要解决了依赖对象间高度耦合的问题，使类可以更专注于自己的功能而不用关注依赖。</p>
+<p>IOC容器的角色很像一个秘书。如果我们没有秘书的情况下，做一件事，从头到尾所有的细节都需要自己梳理好，然后按顺序主次分别处理，直到完成。这个过程中，无论是主要的环节还是次要的步骤都是需要亲自实施的，必然繁琐。但是如果有了秘书，次要部分自然由秘书提前处理好，而决策者只需要处理关键部分。这样工作的效率无疑会大大提高。</p>
+<h2 id="Net开发中常用的IOC容器框架"><a class="header-anchor" href="#Net开发中常用的IOC容器框架">null</a>.Net开发中常用的IOC容器框架</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">框架名称</th>
+<th style="text-align:center">开源地址</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Unity</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/unitycontainer/unity">https://github.com/unitycontainer/unity</a></td>
+<td style="text-align:center">微软官方开发的依赖注入框架</td>
+</tr>
+<tr>
+<td style="text-align:center">MEF</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/mef">https://github.com/microsoftarchive/mef</a></td>
+<td style="text-align:center">已停止维护</td>
+</tr>
+<tr>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="http://Spring.Net">Spring.Net</a></td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-net">https://github.com/spring-projects/spring-net</a></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">AutoFac</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/autofac/Autofac">https://github.com/autofac/Autofac</a></td>
+<td style="text-align:center">最流行的依赖注入框架，轻量且性能高</td>
+</tr>
+<tr>
+<td style="text-align:center">Ninject</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/ninject/Ninject">https://github.com/ninject/Ninject</a></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">DryIOC</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/dadhi/DryIoc">https://github.com/dadhi/DryIoc</a></td>
+<td style="text-align:center">本文介绍框架</td>
+</tr>
+<tr>
+<td style="text-align:center">StructureMap</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://github.com/structuremap/structuremap">https://github.com/structuremap/structuremap</a></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p><a target="_blank" rel="noopener" href="http://xn--4gqta0n9ngmt7npvd8w3akmq4jnt4ygxdfa7960g.Net">以上列举的只是比较常用的一些.Net</a> IOC容器框架，具体的使用方法大同小异。实现的最主要功能无非是依赖注入，个别可能包含了一些高级用法，或者更特殊的支持。但是在常规项目中，我们使用到的部分绝大多数还是基础功能，所以选择框架的时候，个人认为主要考虑性能和市场占有量。基于着这种考虑，按性能首推DryIOC、AutoFac、Ninject、Grace这类轻量高性能为主要特色的框架，如果按热度，则首推AutoFac、Unity这类用户数比较多的种类。至于复杂的使用场景就需要根据实际情况，具体选择适用自己项目的产品了。</p>
+<p>考虑到使用方法相似，在这里对这些框架的具体细节不做过多介绍。下面以DryIOC为例，介绍下它的常规用法。如果将来用到的并不是DryIOC，对于别的框架的使用也是具有很大的参考意义的。重要的是思想，写法只是细节。</p>
+<h2 id="DryIOC使用方法"><a class="header-anchor" href="#DryIOC使用方法">null</a>DryIOC使用方法</h2>
+<p>假设当前存在以下两个接口：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IService</span></span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IClient</span></span><br><span class="line">&#123;</span><br><span class="line">    IService Service &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>两个对应的实现类：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SomeService</span> : <span class="title">IService</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SomeService</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.Console.WriteLine(<span class="keyword">nameof</span>(SomeService) + <span class="string">&quot; is created.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SomeClient</span> : <span class="title">IClient</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IService Service &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SomeClient</span>(<span class="params">IService service</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Service = service;</span><br><span class="line">        System.Console.WriteLine(<span class="keyword">nameof</span>(SomeClient) + <span class="string">&quot; is created.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">string</span> <span class="title">ToString</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这种情况下，我们想创建一个SomeClient对象，一定是要这样写：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> service = <span class="keyword">new</span> SomeService();</span><br><span class="line"><span class="keyword">var</span> client = <span class="keyword">new</span> SomeClient(service);</span><br></pre></td></tr></table></figure>
+<p>在这个过程中，创建SomeClient对象，首先需要获取一个继承于IService的实例，也就是说要知道SomeService的存在，并将其创建出来，如果有更多的依赖，还需要继续向上获取。整个链路的情况下，在创建SomeClient都需要完全了解。这已然是我们前面第一部分讲到的那种情况了。</p>
+<p>同样是对于这种情况，DryIOC的写法是这样的：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建容器</span></span><br><span class="line"><span class="keyword">var</span> container = <span class="keyword">new</span> Container();</span><br><span class="line"><span class="comment">// 注册 -&gt; 当获取ICliecnt接口的实例时，返回SomeClient对象</span></span><br><span class="line">container.Register&lt;IClient, SomeClient&gt;();</span><br><span class="line">container.Register&lt;IService, SomeService&gt;();</span><br><span class="line"><span class="comment">// 获取对象</span></span><br><span class="line"><span class="keyword">var</span> client2 = container.Resolve&lt;IClient&gt;();</span><br></pre></td></tr></table></figure>
+<p>对比两种写法，似乎以IOC创建对象的形式更加繁琐复杂。但实际上，仔细看代码，在总共四行代码中，有三条的作用都是用来创建容器和注册接口的，真正获取实例的只有最后一条。接口一旦注册，在整个容器的生命周期内都是有效的，无论后面获取多少个对象，无论对象的依赖有多少，都是只需要一条语句就可以获取（前提是依赖已经注册）。</p>
+<p>除了上面使用到的只是最简单的注册、创建对象的写法，还有一些指定规则、注销等功能，可以在实践中再做了解。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC%E5%92%8CDI"><span class="toc-number">1.</span> <span class="toc-text">nullIOC和DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">null.Net开发中常用的IOC容器框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DryIOC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">nullDryIOC使用方法</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&text=DryIOC使用介绍"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&is_video=false&description=DryIOC使用介绍"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DryIOC使用介绍&body=Check out this article: https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=DryIOC使用介绍"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&name=DryIOC使用介绍&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&t=DryIOC使用介绍"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021-2022
+    一刀
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li><!--
+     -->
+		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+		<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8a01e795b3dd822e33617cef28e14593";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = '一刀';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

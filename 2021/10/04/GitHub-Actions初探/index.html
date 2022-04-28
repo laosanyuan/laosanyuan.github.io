@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="google-site-verification" content="cWRKvD_1O595kByrLPLUCxQIUnBSDzhxLg0j0kmgEL4" />
+    <meta name="baidu-site-verification" content="code-c6ersgmcTV" />
+    <meta name="sogou_site_verification" content="RbqtFq8FjJ"/>
+    <meta name="msvalidate.01" content="8566932EE034C98204A72F34E44A503A" />
+    <meta name="description" content="nullCICD的概念 CICD是持续集成（Continuous Integration）和持续部署（Continuous Deployment）的简称。是指在开发过程中自动执行一系列脚本来减少开发过程中引入的bug，在新代码从开发到部署过程中尽量减少人工的介入。 持续集成是指频繁多次地将代码集成到主干。在远程仓库push代码后，在这次提交合并至主分支前预先进行一系列测试、构建等流程。对于每次提交">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub Actions初探">
+<meta property="og:url" content="https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/index.html">
+<meta property="og:site_name" content="刀不卷刃">
+<meta property="og:description" content="nullCICD的概念 CICD是持续集成（Continuous Integration）和持续部署（Continuous Deployment）的简称。是指在开发过程中自动执行一系列脚本来减少开发过程中引入的bug，在新代码从开发到部署过程中尽量减少人工的介入。 持续集成是指频繁多次地将代码集成到主干。在远程仓库push代码后，在这次提交合并至主分支前预先进行一系列测试、构建等流程。对于每次提交">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-03T17:29:10.000Z">
+<meta property="article:modified_time" content="2022-04-27T16:01:44.750Z">
+<meta property="article:author" content="一刀">
+<meta property="article:tag" content="GitHub">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>GitHub Actions初探</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2021/02/07/MvvmLight%E4%BD%BF%E7%94%A8%E6%A2%B3%E7%90%86/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&text=GitHub Actions初探"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&is_video=false&description=GitHub Actions初探"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=GitHub Actions初探&body=Check out this article: https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&name=GitHub Actions初探&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&t=GitHub Actions初探"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CICD%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">nullCICD的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-Actions"><span class="toc-number">2.</span> <span class="toc-text">nullGitHub Actions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actions%E7%9A%84%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">nullActions的基础用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Actions%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text">nullActions的一些基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#workflow%E5%9F%BA%E6%9C%AC%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.</span> <span class="toc-text">nullworkflow基本字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B"><span class="toc-number">4.</span> <span class="toc-text">null举例</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        GitHub Actions初探
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">一刀</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-10-03T17:29:10.000Z" itemprop="datePublished">2021-10-04</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/GitHub/" rel="tag">GitHub</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="CICD的概念"><a class="header-anchor" href="#CICD的概念">null</a>CICD的概念</h2>
+<p>CICD是持续集成（Continuous Integration）和持续部署（Continuous Deployment）的简称。是指在开发过程中自动执行一系列脚本来减少开发过程中引入的bug，在新代码从开发到部署过程中尽量减少人工的介入。</p>
+<p>持续集成是指频繁多次地将代码集成到主干。在远程仓库push代码后，在这次提交合并至主分支前预先进行一系列测试、构建等流程。对于每次提交的代码，都进行一次脚本集成操作，保持质量的同时，降低了引入错误的概率。持续部署是在持续集成的基础上更进一步，指将仓库至指定分支部署至产品环境。</p>
+<h2 id="GitHub-Actions"><a class="header-anchor" href="#GitHub-Actions">null</a>GitHub Actions</h2>
+<p>在GitHub上的Actions可以非常方便的支持项目总的持续集成和部署需求。在每个仓库的Tab菜单下都可以找到对应的Actions页面，并且提供免费的集成服务。用户可以通过为项目配置简单的Actions文件达到使用CICD的目的。本质上是提供了一个可以指定配置的服务器，所以Action所能支持的玩法又不仅限于CICD。</p>
+<p>持续集成由多种操作组成，每个项目的需求有相同的需要也有特殊的情况，所以GitHub将持续集成以Action作为单元拆分。每个Action作为独立的脚本文件，存放到代码仓库，供自己甚至他人使用。整个集成的过程就变成了一系列单独Action的组合，也就是所谓的Actions，达到了最终完整的集成目的。</p>
+<p>由于GitHub对Action的支持，用户就可以轻松的使用现成的Action进行使用。</p>
+<h2 id="Actions的基础用法"><a class="header-anchor" href="#Actions的基础用法">null</a>Actions的基础用法</h2>
+<h3 id="Actions的一些基本概念"><a class="header-anchor" href="#Actions的一些基本概念">null</a>Actions的一些基本概念</h3>
+<ul>
+<li>
+<p>workflow：持续集成运行一次的过程，是工作流。</p>
+</li>
+<li>
+<p>events：仓库触发运行工作流的具体行为，具体支持的事件种类可以查看<a target="_blank" rel="noopener" href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows">GitHub官方支持列表</a>。</p>
+</li>
+<li>
+<p>组成workflow的工作任务部分，一个workflow中可包含多个job。</p>
+</li>
+<li>
+<p>step：job的组成部分。</p>
+</li>
+<li>
+<p>action：每个step可执行一个或多个action（命令），是具体的操作或行为。</p>
+</li>
+</ul>
+<p>workflow文件存放于代码仓库的<code>.github/workflows</code>目录下，文件采用YAML格式，名称任意，但需以<code>.yml</code>结尾。一个库中可以包含多个workflow，分别存放在对应的文件个体中。</p>
+<h3 id="workflow基本字段"><a class="header-anchor" href="#workflow基本字段">null</a>workflow基本字段</h3>
+<ul>
+<li>name：workflow名称，根据需求自行设置。</li>
+<li>on：触发workflow执行的条件event，如push。on事件可以以数组形式存在，如on: [push, pull_request]，指定触发事件时可以限定分支或标签。</li>
+<li>jobs：workflow的工作主体。jobs下可以列出需要执行的每一项job，名称自己定义。
+<ul>
+<li>jobs.&lt;job_id&gt;.needs：用于指定job之间的以来顺序，可以通过配置来指定当前的任务关系。选填。</li>
+<li>jobs.&lt;job_id&gt;.runs-on：指定运行所需要的虚拟机环境，是必填字段。</li>
+<li>jobs.&lt;job_id&gt;.env：环境变量</li>
+<li>jobs.&lt;job_id&gt;.steps：指job的运行步骤，每个steps下可包含一个或多个step。
+<ul>
+<li>jobs&lt;job_id&gt;.steps.run：该步骤运行的命令或者action。</li>
+<li>jobs&lt;job_id&gt;.steps.env：该步骤所需的环境变量。</li>
+<li>jobs&lt;job_id&gt;.steps.uses：指定在当前step中需要运行的action，可以在此处指定使用他人或自己写好的Action。</li>
+<li>jobs&lt;job_id&gt;.steps.with：action需要的参数。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="举例"><a class="header-anchor" href="#举例">null</a>举例</h2>
+<p>研究了Actions之后，在我的<a target="_blank" rel="noopener" href="https://github.com/laosanyuan/HuoHuan">小项目</a>上验证了一下，workflow文件内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># workflow名称</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">Huohuan</span> <span class="bullet">-</span> <span class="string">CI</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 触发条件 - master分支下push代码触发</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">master</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Actions任务Jobs</span></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="comment"># job，案自己需求命名</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">  <span class="comment"># 策略，具体用法可参考[strategy context](https://docs.github.com/en/actions/learn-github-actions/contexts#strategy-context)</span></span><br><span class="line">    <span class="attr">strategy:</span></span><br><span class="line">      <span class="attr">matrix:</span></span><br><span class="line">        <span class="attr">configuration:</span> [<span class="string">Debug</span>, <span class="string">Release</span>]</span><br><span class="line">    <span class="comment"># 运行环境</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">windows-latest</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="comment"># 拉取代码，`actions/checkout@v3`表示调用账户actions下checkout项目的v3分支</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">      </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">安装.Net</span> <span class="string">Core</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-dotnet@v1</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">dotnet-version:</span> <span class="number">6.0</span><span class="string">.x</span></span><br><span class="line">        </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">安装Nuget</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">nuget/setup-nuget@v1</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">nuget</span> <span class="string">restore</span> <span class="string">src\HuoHuan.sln</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">编译</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">dotnet</span> <span class="string">build</span> <span class="string">src\HuoHuan.sln</span> <span class="string">--no-restore</span> <span class="string">-c</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.configuration</span> <span class="string">&#125;&#125;</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment"># $&#123;&#123;&#125;&#125;可以使用上下文参数。</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">单元测试</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">dotnet</span> <span class="string">test</span> <span class="string">src\HuoHuan.sln</span> <span class="string">-c</span> <span class="string">$env:Configuration</span></span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="attr">Configuration:</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.configuration</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>更多用法可以参考<a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">官方文档</a>。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CICD%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">nullCICD的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-Actions"><span class="toc-number">2.</span> <span class="toc-text">nullGitHub Actions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actions%E7%9A%84%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">nullActions的基础用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Actions%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text">nullActions的一些基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#workflow%E5%9F%BA%E6%9C%AC%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.</span> <span class="toc-text">nullworkflow基本字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B"><span class="toc-number">4.</span> <span class="toc-text">null举例</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&text=GitHub Actions初探"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&is_video=false&description=GitHub Actions初探"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=GitHub Actions初探&body=Check out this article: https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&title=GitHub Actions初探"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&name=GitHub Actions初探&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://laosanyuan.github.io/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/&t=GitHub Actions初探"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021-2022
+    一刀
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li><!--
+     -->
+		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+		<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8a01e795b3dd822e33617cef28e14593";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = '一刀';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

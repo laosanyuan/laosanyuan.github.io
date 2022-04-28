@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="google-site-verification" content="cWRKvD_1O595kByrLPLUCxQIUnBSDzhxLg0j0kmgEL4" />
+    <meta name="baidu-site-verification" content="code-c6ersgmcTV" />
+    <meta name="sogou_site_verification" content="RbqtFq8FjJ"/>
+    <meta name="msvalidate.01" content="8566932EE034C98204A72F34E44A503A" />
+    <meta name="description" content="record是C#9.0之后的版本新引入的一种引用类型——记录。一般而言，我们常用到class和struct两种数据类型，两种类型各有优势，record可以说是各取二者所长的一种新的形式。 nullclass、struct与record的区别 nullclass class是我们日常开发中最常用的类型，属于引用类型，可以继承、支持多态，数据存放于堆上，属于引用类型。在进行两个对象的&#x3D;&#x3D;比较时，默认">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C# Record使用介绍">
+<meta property="og:url" content="https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="刀不卷刃">
+<meta property="og:description" content="record是C#9.0之后的版本新引入的一种引用类型——记录。一般而言，我们常用到class和struct两种数据类型，两种类型各有优势，record可以说是各取二者所长的一种新的形式。 nullclass、struct与record的区别 nullclass class是我们日常开发中最常用的类型，属于引用类型，可以继承、支持多态，数据存放于堆上，属于引用类型。在进行两个对象的&#x3D;&#x3D;比较时，默认">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-14T15:10:00.000Z">
+<meta property="article:modified_time" content="2022-04-27T16:01:44.750Z">
+<meta property="article:author" content="一刀">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content=".Net">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>C# Record使用介绍</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2021/12/28/C-%E4%B8%AD%E7%9A%84%E8%A7%A3%E6%9E%84-Deconstruct/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2021/10/04/GitHub-Actions%E5%88%9D%E6%8E%A2/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&text=C# Record使用介绍"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&is_video=false&description=C# Record使用介绍"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C# Record使用介绍&body=Check out this article: https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&name=C# Record使用介绍&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&t=C# Record使用介绍"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#class%E3%80%81struct%E4%B8%8Erecord%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">nullclass、struct与record的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#class"><span class="toc-number">1.1.</span> <span class="toc-text">nullclass</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct"><span class="toc-number">1.2.</span> <span class="toc-text">nullstruct</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#record"><span class="toc-number">1.3.</span> <span class="toc-text">nullrecord</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">null使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init%E5%92%8Cwith"><span class="toc-number">3.</span> <span class="toc-text">nullinit和with</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#init"><span class="toc-number">3.1.</span> <span class="toc-text">nullinit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#with"><span class="toc-number">3.2.</span> <span class="toc-text">nullwith</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#record%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.</span> <span class="toc-text">nullrecord应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Wep-Api"><span class="toc-number">4.0.1.</span> <span class="toc-text">nullWep Api</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97"><span class="toc-number">4.0.2.</span> <span class="toc-text">null并发和多线程计算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.0.3.</span> <span class="toc-text">null基于浅拷贝的原型模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%83%85%E5%86%B5"><span class="toc-number">4.0.4.</span> <span class="toc-text">null其他情况</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net6-C-10-%E4%B8%AD%E7%9A%84%E6%96%B0%E7%94%A8%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">null.Net6(C#10)中的新用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">null总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        C# Record使用介绍
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">一刀</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-14T15:10:00.000Z" itemprop="datePublished">2021-12-14</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Net/" rel="tag">.Net</a>, <a class="tag-link-link" href="/tags/C/" rel="tag">C#</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><code>record</code>是C#9.0之后的版本新引入的一种引用类型——记录。一般而言，我们常用到class和struct两种数据类型，两种类型各有优势，record可以说是各取二者所长的一种新的形式。</p>
+<h2 id="class、struct与record的区别"><a class="header-anchor" href="#class、struct与record的区别">null</a>class、struct与record的区别</h2>
+<h3 id="class"><a class="header-anchor" href="#class">null</a>class</h3>
+<p>class是我们日常开发中最常用的类型，属于引用类型，可以继承、支持多态，数据存放于堆上，属于引用类型。在进行两个对象的==比较时，默认比较的是对象的引用地址是否相等。</p>
+<h3 id="struct"><a class="header-anchor" href="#struct">null</a>struct</h3>
+<p>struct不支持继承和多态，但可以实现接口。struct存放于栈上，属于值类型，故常用于简单类型。==比较时则比较的是struct的真实值数据。</p>
+<p>自C#7.2开始，新增了一种<code>readonly struct</code>新特性，通过名字可以看出，这种用法的主要是针对不可变数据设计的。声明了radonly struct之后，struct内的属性只能在实例化时设置，再这之后将不能进行修改，保证了数据的安全。这种用途与record的一些使用场景类似，但实际使用体验上还是record更优。</p>
+<h3 id="record"><a class="header-anchor" href="#record">null</a>record</h3>
+<p>本身属于引用类型，实际上是通过class特殊处理实现其功能，所以类支持的功能在record也是可行的。其兼顾class和struct的特定而成，数据存放于对上属于引用类型，支持继承和多态。但它又有值类型的特征，==或Equals的判断时，判断的是各属性的真实值。record重写了Equals和GetHashCode函数等，比较的内容改为了个属性的值而非引用地址(但是考虑到有些场景下还可能需判断引用地址是否一致，仍可以使用ReferenceEquals进行判断，它是没有被重写的)。</p>
+<p>从本质上来说，record仍然是一个类，只是包含了一些像值类型的行为。在一些使用场景下可以作为class或struct的替代，可能会有更好的使用效果。</p>
+<h2 id="使用方式"><a class="header-anchor" href="#使用方式">null</a>使用方式</h2>
+<p>record的定义方法可以与类一样，只是关键字从class变为record。但还提供了一种更加简洁的声明方式：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.常规的声明方式，与class一致。</span></span><br><span class="line"><span class="keyword">record</span> <span class="title">TestClass</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2.简洁声明方式，也是声明了一个具有Name属性的记录。</span></span><br><span class="line"><span class="keyword">record</span> <span class="title">TestClass2</span>(<span class="title">string</span> <span class="title">Name</span>);</span><br></pre></td></tr></table></figure>
+<p>通过上面两种方式可以看到，第二种简洁版的使用起来更简单易写。但第二种写法所声明的属性是init型，而非set，实际上创建的是一种不可变类型，这种区别在后文有讲。</p>
+<p>这种创建不可变类型的方式，正体现了record设计的初衷——那就是推荐用来存放不可变的、简短的、需要值比较的数据。与复杂的class和struct使用场景不同，record的主旨，我认为是“数据”。虽说不可变类型是record的推荐使用形式，但它依然可以像常规的类或结构体那样使用复杂的函数和可变类型。</p>
+<h2 id="init和with"><a class="header-anchor" href="#init和with">null</a>init和with</h2>
+<p>在C#9.0中，与record同时增加的关键字还包括init和with。</p>
+<h3 id="init"><a class="header-anchor" href="#init">null</a>init</h3>
+<p>其中，<code>init</code>应用于属性中，相当于一种特殊的set，即只在初始化时可应用。但其不仅局限于record，可以使用属性的地方都适用，struct和class中一样有效。以下面class的案例来说：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">TestClass</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Id &#123; <span class="keyword">get</span>; <span class="keyword">init</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Description &#123; <span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestClass</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestClass</span>(<span class="params"><span class="built_in">string</span> name, <span class="built_in">int</span> id, <span class="built_in">string</span> desc</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Name = name;</span><br><span class="line">        Id = id;</span><br><span class="line">        Description = desc;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面的写法可以看出，init的写法于set一致。但是它提供的功能时什么样呢？</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这样通过构造函数创建对象肯定是没问题的</span></span><br><span class="line"><span class="keyword">var</span> test = <span class="keyword">new</span> TestClass(<span class="string">&quot;小明&quot;</span>,<span class="number">1234</span>,<span class="string">&quot;少先队员&quot;</span>);</span><br><span class="line"><span class="comment">// 这样改变一个属性的值也是没问题的</span></span><br><span class="line">test.Description = <span class="string">&quot;群众&quot;</span>;</span><br><span class="line"><span class="comment">// 但是下面这两种写法就会报错</span></span><br><span class="line">test.Id = <span class="number">1235</span>;</span><br><span class="line">test.Name = <span class="string">&quot;小刚&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>可见，此时的Id属性和Name属性都是一种不可变类型，即创建之后不可以再发生改变的属性。虽然二者都达到了不可变的效果，但是实际上还是有区别的。那是以为private set这种形式并不是真正的不可变，因为在class的内部它依然是可变的！而init最大的不同就是，仅在创建时可以赋值，其他任何时候都不可再进行修改。事实上，readonly struct也可以达到这样的使用效果。但是只读结构体设置属性的值却只能通过构造函数来赋予。record则可以这样写：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此时对于init来说也算作“初始化时”。</span></span><br><span class="line"><span class="keyword">var</span> test = <span class="keyword">new</span> TestClass()&#123; Id = <span class="number">12</span>&#125;;</span><br></pre></td></tr></table></figure>
+<p>可见，一方面只读结构体相较record缺少了一点灵活性，另一方面，record作为一种特殊的class也有不同于 struct的使用场景。</p>
+<h3 id="with"><a class="header-anchor" href="#with">null</a>with</h3>
+<p>而<code>with</code>关键字则是C#提供的一种克隆语法糖，可以更快捷的创建对象副本——一种强类型的浅拷贝。但其是针对struct和record而设立，对class是不能使用的：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义record</span></span><br><span class="line"><span class="keyword">record</span> <span class="title">TestRecord</span>(<span class="title">string</span> <span class="title">Name</span>,<span class="title">int</span> <span class="title">Id</span>);</span><br><span class="line"><span class="comment">// 创建record实例</span></span><br><span class="line"><span class="keyword">var</span> test = <span class="keyword">new</span>(<span class="string">&quot;小明&quot;</span>,<span class="number">1234</span>);</span><br><span class="line"><span class="comment">// 使用with克隆</span></span><br><span class="line"><span class="keyword">var</span> test1 = test <span class="keyword">with</span> &#123;&#125;;</span><br><span class="line"><span class="comment">// 使用with克隆并修改属性</span></span><br><span class="line"><span class="keyword">var</span> test2 = test <span class="keyword">with</span> &#123; Id = <span class="number">20</span>&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="record应用场景"><a class="header-anchor" href="#record应用场景">null</a>record应用场景</h2>
+<p>基于record推出的初衷，可以方便地使用不可变类型和值比较功能。那么在实际使用种就可以针对性的进行使用。将其应用在需要数据不可变或值比较的场景下，无疑是十分合适的。配合init和with表达式，更加丰富了record的使用形式。那么它的常见应用场景可以参考以下几种：</p>
+<h4 id="Wep-Api"><a class="header-anchor" href="#Wep-Api">null</a>Wep Api</h4>
+<p>用于web api返回的数据，通常作为一种一次性的传输型数据，是不需要改变的，可以使用record。</p>
+<h4 id="并发和多线程计算"><a class="header-anchor" href="#并发和多线程计算">null</a>并发和多线程计算</h4>
+<p>作为不可变数据类型对于并行计算和数据共享十分安全。</p>
+<h4 id="基于浅拷贝的原型模式"><a class="header-anchor" href="#基于浅拷贝的原型模式">null</a>基于浅拷贝的原型模式</h4>
+<p>通过使用with表达式，可以便捷的进行浅拷贝，而无需自己去实现克隆方法。</p>
+<h4 id="其他情况"><a class="header-anchor" href="#其他情况">null</a>其他情况</h4>
+<p>其他涉及到大量数据基于值类型比较和复制的场景。</p>
+<h2 id="Net6-C-10-中的新用法"><a class="header-anchor" href="#Net6-C-10-中的新用法">null</a>.Net6(C#10)中的新用法</h2>
+<p>在最新的C#10中，有了新的record用法。在前面的分享中，我们知道record本质上是一个特殊的class。但在C#10中，这种说法已经不再准确。因为更准确的说record变成了一个关键字。它不再是只针对class而言的数据形式了，而是出现了一种结构类型的record（或者说record类型的结构）。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 之前的record声明方法。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">record</span> <span class="title">TestRecord1</span>(<span class="params"><span class="built_in">string</span> Name</span>)</span>;</span><br><span class="line"><span class="comment">// 新的record声明方法，效果等同于第一种。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">record</span> <span class="keyword">class</span> <span class="title">TestRecord2</span>(<span class="params"><span class="built_in">string</span> Name</span>)</span>;</span><br><span class="line"><span class="comment">// 新增的record struct形式。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">record</span> <span class="keyword">struct</span> <span class="title">TestRecord3</span>(<span class="params"><span class="built_in">string</span> Name</span>)</span>;</span><br></pre></td></tr></table></figure>
+<p>从写法上也可以猜出，在C#10中新增的写法是为了区分record struct这种新形式。我们知道第二这种写法，默认是声明了不可变类型的record，但是在record struct的简化写法中，声明的却是一个可变类型的struct。因为本身就是值类型，所以也不需要再去重写比较方法（但是新增了==/!=操作符，常规struct是不支持==/!=比较的）。</p>
+<p>那么相较于传统struct，它剩下的优势恐怕就是with表达式了。感觉并没有一些特殊的亮点，也许是我们看懂，等将来有其他感悟时再更新。</p>
+<h2 id="总结"><a class="header-anchor" href="#总结">null</a>总结</h2>
+<p>上面的介绍可能略微笼统，但足够日常使用参考。我们需要了解的是，record并不是不可或缺的，即便没有record的出现，我们仍可以实现它所实现的种种功能，仍能处理它所面对的使用场景。无论是值比较或不可变类型，都可以通过class实现（毕竟record本质上还是class）,但不同的是，record提供给了开发者一种更便捷易用的使用方法，减少了代码量。你可以说它没有带来多巨大的变革，但不可否认的是使用record却能提高生产效率，这正是一个新事物的使命。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#class%E3%80%81struct%E4%B8%8Erecord%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">nullclass、struct与record的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#class"><span class="toc-number">1.1.</span> <span class="toc-text">nullclass</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct"><span class="toc-number">1.2.</span> <span class="toc-text">nullstruct</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#record"><span class="toc-number">1.3.</span> <span class="toc-text">nullrecord</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">null使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init%E5%92%8Cwith"><span class="toc-number">3.</span> <span class="toc-text">nullinit和with</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#init"><span class="toc-number">3.1.</span> <span class="toc-text">nullinit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#with"><span class="toc-number">3.2.</span> <span class="toc-text">nullwith</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#record%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.</span> <span class="toc-text">nullrecord应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Wep-Api"><span class="toc-number">4.0.1.</span> <span class="toc-text">nullWep Api</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97"><span class="toc-number">4.0.2.</span> <span class="toc-text">null并发和多线程计算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.0.3.</span> <span class="toc-text">null基于浅拷贝的原型模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%83%85%E5%86%B5"><span class="toc-number">4.0.4.</span> <span class="toc-text">null其他情况</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net6-C-10-%E4%B8%AD%E7%9A%84%E6%96%B0%E7%94%A8%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">null.Net6(C#10)中的新用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">null总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&text=C# Record使用介绍"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&is_video=false&description=C# Record使用介绍"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C# Record使用介绍&body=Check out this article: https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&title=C# Record使用介绍"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&name=C# Record使用介绍&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://laosanyuan.github.io/2021/12/14/C-Record%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/&t=C# Record使用介绍"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021-2022
+    一刀
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/laosanyuan">项目</a></li><!--
+     -->
+		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+		<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8a01e795b3dd822e33617cef28e14593";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = '一刀';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

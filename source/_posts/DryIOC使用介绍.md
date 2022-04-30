@@ -55,6 +55,7 @@ IOC容器的角色很像一个秘书。如果我们没有秘书的情况下，�
 
 ## .Net开发中常用的IOC容器框架
 
+
 |   框架名称   |                   开源地址                    |                描述                |
 | :----------: | :-------------------------------------------: | :--------------------------------: |
 |    Unity     |    https://github.com/unitycontainer/unity    |     微软官方开发的依赖注入框架     |
@@ -64,6 +65,7 @@ IOC容器的角色很像一个秘书。如果我们没有秘书的情况下，�
 |   Ninject    |      https://github.com/ninject/Ninject       |                                    |
 |    DryIOC    |        https://github.com/dadhi/DryIoc        |            本文介绍框架            |
 | StructureMap | https://github.com/structuremap/structuremap  |                                    |
+
 
 以上列举的只是比较常用的一些.Net IOC容器框架，具体的使用方法大同小异。实现的最主要功能无非是依赖注入，个别可能包含了一些高级用法，或者更特殊的支持。但是在常规项目中，我们使用到的部分绝大多数还是基础功能，所以选择框架的时候，个人认为主要考虑性能和市场占有量。基于着这种考虑，按性能首推DryIOC、AutoFac、Ninject、Grace这类轻量高性能为主要特色的框架，如果按热度，则首推AutoFac、Unity这类用户数比较多的种类。至于复杂的使用场景就需要根据实际情况，具体选择适用自己项目的产品了。
 

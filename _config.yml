@@ -46,13 +46,13 @@ future: true
 highlight:
   enable: true
   line_number: true
-  auto_detect: true
+  auto_detect: false
   tab_replace: ''
   wrap: true
-  hljs: true
+  hljs: false
 prismjs:
   enable: false
-  preprocess: false
+  preprocess: true
   line_number: true
   tab_replace: ''
 
@@ -111,4 +111,26 @@ sitemap:
 baidusitemap:
   path: baidusitemap.xml
   
-markdown: 'commonmark'
+# markdown: 'default'
+# Markdown-it config
+markdown:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: true
+    linkify: true
+    typographer: true
+    quotes: '“”‘’'
+  plugins:
+    - markdown-it-abbr
+    - markdown-it-footnote
+    - markdown-it-ins
+    - markdown-it-sub
+    - markdown-it-sup
+  anchors:
+    level: 2
+    collisionSuffix: 'v'
+    permalink: true
+    permalinkClass: header-anchor
+    permalinkSymbol:  
+    

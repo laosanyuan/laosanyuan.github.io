@@ -10,12 +10,12 @@
     <meta name="baidu-site-verification" content="code-c6ersgmcTV" />
     <meta name="sogou_site_verification" content="RbqtFq8FjJ"/>
     <meta name="msvalidate.01" content="8566932EE034C98204A72F34E44A503A" />
-    <meta name="description" content="nullIOC和DI IOC，全称Inversion of Control，即“控制反转”，是一种设计原则。而DI（Dependency injection）指“依赖注入”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。 请">
+    <meta name="description" content="IOC和DI IOC，全称Inversion of Control，即“控制反转”，是一种设计原则。而DI（Dependency injection）指“依赖注入”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。 请看下面这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DryIOC使用介绍">
 <meta property="og:url" content="https://laosanyuan.github.io/2022/04/10/DryIOC%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="刀不卷刃">
-<meta property="og:description" content="nullIOC和DI IOC，全称Inversion of Control，即“控制反转”，是一种设计原则。而DI（Dependency injection）指“依赖注入”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。 请">
+<meta property="og:description" content="IOC和DI IOC，全称Inversion of Control，即“控制反转”，是一种设计原则。而DI（Dependency injection）指“依赖注入”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。 请看下面这">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-10T14:58:50.000Z">
 <meta property="article:modified_time" content="2022-04-28T15:34:54.782Z">
@@ -112,7 +112,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC%E5%92%8CDI"><span class="toc-number">1.</span> <span class="toc-text">nullIOC和DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">null.Net开发中常用的IOC容器框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DryIOC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">nullDryIOC使用方法</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC%E5%92%8CDI"><span class="toc-number">1.</span> <span class="toc-text">IOC和DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">.Net开发中常用的IOC容器框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DryIOC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">DryIOC使用方法</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -156,7 +156,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="IOC和DI"><a class="header-anchor" href="#IOC和DI">null</a>IOC和DI</h2>
+    <h2 id="IOC和DI"><a class="header-anchor" href="#IOC和DI"></a>IOC和DI</h2>
 <p>IOC，全称Inversion of Control，即“<strong>控制反转</strong>”，是一种<strong>设计原则</strong>。而DI（Dependency injection）指“<strong>依赖注入</strong>”，是实现IOC的一种方法。DI实现IOC的方法是引入“容器”，在使用前将会被依赖的对象统一注册到容器中，将对象的分配权交给容器。当需要实例对象时，并不是通过new来创建，而是经由容器自动装配得到。这个过程就是所谓的依赖注入。</p>
 <p>请看下面这个例子：</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">A</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Description &#123; <span class="keyword">get</span>; &#125; = <span class="string">&quot;I am A&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">B</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> A A &#123; <span class="keyword">get</span>; <span class="keyword">init</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span>(<span class="params">A a</span>)</span></span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">this</span>.A = a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetDescription</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> A.Description;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -167,7 +167,7 @@
 <p>很显然，B对象的创建被控制了，实例的出现并不经new得到而是交由IOC容器给出，这个过程是为被控制。而创建依赖对象的权利反转了。在常规的写法中依赖的创建过程由用户使用者所有，而引入IOC容器后，依赖对象的创建则完全脱离变为由容器管理，使用者变为被动等待，是为反转。</p>
 <p>依赖注入的使用，主要解决了依赖对象间高度耦合的问题，使类可以更专注于自己的功能而不用关注依赖。</p>
 <p>IOC容器的角色很像一个秘书。如果我们没有秘书的情况下，做一件事，从头到尾所有的细节都需要自己梳理好，然后按顺序主次分别处理，直到完成。这个过程中，无论是主要的环节还是次要的步骤都是需要亲自实施的，必然繁琐。但是如果有了秘书，次要部分自然由秘书提前处理好，而决策者只需要处理关键部分。这样工作的效率无疑会大大提高。</p>
-<h2 id="Net开发中常用的IOC容器框架"><a class="header-anchor" href="#Net开发中常用的IOC容器框架">null</a>.Net开发中常用的IOC容器框架</h2>
+<h2 id="Net开发中常用的IOC容器框架"><a class="header-anchor" href="#Net开发中常用的IOC容器框架"></a>.Net开发中常用的IOC容器框架</h2>
 <table>
 <thead>
 <tr>
@@ -216,7 +216,7 @@
 </table>
 <p><a target="_blank" rel="noopener" href="http://xn--4gqta0n9ngmt7npvd8w3akmq4jnt4ygxdfa7960g.Net">以上列举的只是比较常用的一些.Net</a> IOC容器框架，具体的使用方法大同小异。实现的最主要功能无非是依赖注入，个别可能包含了一些高级用法，或者更特殊的支持。但是在常规项目中，我们使用到的部分绝大多数还是基础功能，所以选择框架的时候，个人认为主要考虑性能和市场占有量。基于着这种考虑，按性能首推DryIOC、AutoFac、Ninject、Grace这类轻量高性能为主要特色的框架，如果按热度，则首推AutoFac、Unity这类用户数比较多的种类。至于复杂的使用场景就需要根据实际情况，具体选择适用自己项目的产品了。</p>
 <p>考虑到使用方法相似，在这里对这些框架的具体细节不做过多介绍。下面以DryIOC为例，介绍下它的常规用法。如果将来用到的并不是DryIOC，对于别的框架的使用也是具有很大的参考意义的。重要的是思想，写法只是细节。</p>
-<h2 id="DryIOC使用方法"><a class="header-anchor" href="#DryIOC使用方法">null</a>DryIOC使用方法</h2>
+<h2 id="DryIOC使用方法"><a class="header-anchor" href="#DryIOC使用方法"></a>DryIOC使用方法</h2>
 <p>假设当前存在以下两个接口：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IService</span></span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IClient</span></span><br><span class="line">&#123;</span><br><span class="line">    IService Service &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>两个对应的实现类：</p>
@@ -259,7 +259,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC%E5%92%8CDI"><span class="toc-number">1.</span> <span class="toc-text">nullIOC和DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">null.Net开发中常用的IOC容器框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DryIOC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">nullDryIOC使用方法</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC%E5%92%8CDI"><span class="toc-number">1.</span> <span class="toc-text">IOC和DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Net%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">.Net开发中常用的IOC容器框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DryIOC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">DryIOC使用方法</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

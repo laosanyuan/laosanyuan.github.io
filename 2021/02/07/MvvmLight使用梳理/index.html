@@ -10,20 +10,20 @@
     <meta name="baidu-site-verification" content="code-c6ersgmcTV" />
     <meta name="sogou_site_verification" content="RbqtFq8FjJ"/>
     <meta name="msvalidate.01" content="8566932EE034C98204A72F34E44A503A" />
-    <meta name="description" content="nullMVVM模式 MVVM模式是一种将视图与业务高度解耦的基于数据绑定的设计模式。配合WPF的Binding用法，可以进行轻松地使用MVVM模式开发WPF应用程序。关于MVVM模式的讲解网上有很多，此处不做赘述。只列举下各模块之间的对应关系方便理解：  Model：负责数据实体的结构处理，与ViewModel交互。 View：负责UI界面的展示，与ViewModel交互。 ViewModel：">
+    <meta name="description" content="MVVM模式 MVVM模式是一种将视图与业务高度解耦的基于数据绑定的设计模式。配合WPF的Binding用法，可以进行轻松地使用MVVM模式开发WPF应用程序。关于MVVM模式的讲解网上有很多，此处不做赘述。只列举下各模块之间的对应关系方便理解：  Model：负责数据实体的结构处理，与ViewModel交互。 View：负责UI界面的展示，与ViewModel交互。 ViewModel：负责界面">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MvvmLight使用梳理">
 <meta property="og:url" content="https://laosanyuan.github.io/2021/02/07/MvvmLight%E4%BD%BF%E7%94%A8%E6%A2%B3%E7%90%86/index.html">
 <meta property="og:site_name" content="刀不卷刃">
-<meta property="og:description" content="nullMVVM模式 MVVM模式是一种将视图与业务高度解耦的基于数据绑定的设计模式。配合WPF的Binding用法，可以进行轻松地使用MVVM模式开发WPF应用程序。关于MVVM模式的讲解网上有很多，此处不做赘述。只列举下各模块之间的对应关系方便理解：  Model：负责数据实体的结构处理，与ViewModel交互。 View：负责UI界面的展示，与ViewModel交互。 ViewModel：">
+<meta property="og:description" content="MVVM模式 MVVM模式是一种将视图与业务高度解耦的基于数据绑定的设计模式。配合WPF的Binding用法，可以进行轻松地使用MVVM模式开发WPF应用程序。关于MVVM模式的讲解网上有很多，此处不做赘述。只列举下各模块之间的对应关系方便理解：  Model：负责数据实体的结构处理，与ViewModel交互。 View：负责UI界面的展示，与ViewModel交互。 ViewModel：负责界面">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-07T01:09:15.000Z">
 <meta property="article:modified_time" content="2022-04-27T16:01:44.750Z">
 <meta property="article:author" content="一刀">
 <meta property="article:tag" content="C#">
-<meta property="article:tag" content="IOC">
 <meta property="article:tag" content="WPF">
 <meta property="article:tag" content="MvvmLight">
+<meta property="article:tag" content="IOC">
 <meta name="twitter:card" content="summary">
     
     
@@ -111,7 +111,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MVVM%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">nullMVVM模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MvvmLight"><span class="toc-number">2.</span> <span class="toc-text">nullMvvmLight</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MvvmLight%E7%9A%84%E6%9E%84%E6%88%90"><span class="toc-number">2.1.</span> <span class="toc-text">nullMvvmLight的构成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelBase"><span class="toc-number">2.1.1.</span> <span class="toc-text">nullViewModelBase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelLocator"><span class="toc-number">2.1.2.</span> <span class="toc-text">nullViewModelLocator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Messenger"><span class="toc-number">2.1.3.</span> <span class="toc-text">nullMessenger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SImpleIoc"><span class="toc-number">2.1.4.</span> <span class="toc-text">nullSImpleIoc</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MVVM%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">MVVM模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MvvmLight"><span class="toc-number">2.</span> <span class="toc-text">MvvmLight</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MvvmLight%E7%9A%84%E6%9E%84%E6%88%90"><span class="toc-number">2.1.</span> <span class="toc-text">MvvmLight的构成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelBase"><span class="toc-number">2.1.1.</span> <span class="toc-text">ViewModelBase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelLocator"><span class="toc-number">2.1.2.</span> <span class="toc-text">ViewModelLocator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Messenger"><span class="toc-number">2.1.3.</span> <span class="toc-text">Messenger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SImpleIoc"><span class="toc-number">2.1.4.</span> <span class="toc-text">SImpleIoc</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -155,20 +155,20 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="MVVM模式"><a class="header-anchor" href="#MVVM模式">null</a>MVVM模式</h2>
+    <h2 id="MVVM模式"><a class="header-anchor" href="#MVVM模式"></a>MVVM模式</h2>
 <p>MVVM模式是一种将视图与业务高度解耦的基于数据绑定的设计模式。配合WPF的Binding用法，可以进行轻松地使用MVVM模式开发WPF应用程序。关于MVVM模式的讲解网上有很多，此处不做赘述。只列举下各模块之间的对应关系方便理解：</p>
 <blockquote>
 <p>Model：负责数据实体的结构处理，与ViewModel交互。</p>
 <p>View：负责UI界面的展示，与ViewModel交互。</p>
 <p>ViewModel：负责界面视图业务的逻辑处理并将其反映给界面，是View和Model的中间连接部分。</p>
 </blockquote>
-<h2 id="MvvmLight"><a class="header-anchor" href="#MvvmLight">null</a>MvvmLight</h2>
-<h3 id="MvvmLight的构成"><a class="header-anchor" href="#MvvmLight的构成">null</a>MvvmLight的构成</h3>
-<h4 id="ViewModelBase"><a class="header-anchor" href="#ViewModelBase">null</a>ViewModelBase</h4>
+<h2 id="MvvmLight"><a class="header-anchor" href="#MvvmLight"></a>MvvmLight</h2>
+<h3 id="MvvmLight的构成"><a class="header-anchor" href="#MvvmLight的构成"></a>MvvmLight的构成</h3>
+<h4 id="ViewModelBase"><a class="header-anchor" href="#ViewModelBase"></a>ViewModelBase</h4>
 <p>所有ViewModel继承的基类，其继承自ObservableObject，同时实现了ICleanup接口，ObservableObject实现了INotifyPropertyChanged接口，用于通知属性的改变。</p>
 <p>可以通过下面的写法提供用于绑定的属性：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="built_in">string</span> nickName = <span class="string">&quot;未知账号&quot;</span>;</span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 昵称</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">string</span> NickName</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">get</span> =&gt;<span class="keyword">this</span>.nickName; </span><br><span class="line">    <span class="keyword">set</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.nickName = <span class="keyword">value</span>;</span><br><span class="line">        <span class="keyword">base</span>.RaisePropertyChanged(<span class="keyword">nameof</span>(NickName), <span class="keyword">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="ViewModelLocator"><a class="header-anchor" href="#ViewModelLocator">null</a>ViewModelLocator</h4>
+<h4 id="ViewModelLocator"><a class="header-anchor" href="#ViewModelLocator"></a>ViewModelLocator</h4>
 <p>ViewModel的定位器，全部ViewModel集中创建、分发的地方，是View连接View的唯一来源。理论上在MvvmLight下不允许自行创建ViewModel实例，这样可以避免View层与ViewModel的过度耦合和对象实例的滥用。每个ViewModel都应在ViewModelLocator中体现，且应依照Nuget安装MvvmLight模板样式以依赖注入显示创建对应实例通过只读属性对外暴露。在引入MvvmLight之后，已通过模板自动创建了ViewModellocator，且将其对象实例加入到了全局资源中，这样可以在任何地方以资源方式使用 。</p>
 <p>但是需要强调的是，MvvmLocator并不是必须使用的。不使用或直接删除也一样可以应用Mvvm模式，只是这种结构相当于MvvmLight提供了一种使用建议。</p>
 <p>以下是安装引入MvvmLight之后自动生成的标准ViewModelLocator：</p>
@@ -181,14 +181,14 @@
 <p>以上写法即为将DataContext设置为Locator(ViewModelLocator资源对象)中的Main(AppViewModel依赖注入实例)。这种写法与cs文件中写法效果一样：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AppView</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">this</span>.DataContext=<span class="keyword">new</span> AppViewModel();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>但是，写在.xaml中和写在.cs中还是有区别的，那就是写在.xaml文件中时，可以通过设计界面看到实时绑定数据，VS的即时提示也对编码十分友好，而写在.cs中时，则不会实时提示。所以正常来说，写在.xaml中则更为优雅舒畅。</p>
-<h4 id="Messenger"><a class="header-anchor" href="#Messenger">null</a>Messenger</h4>
+<h4 id="Messenger"><a class="header-anchor" href="#Messenger"></a>Messenger</h4>
 <p>顾名思义，视为信息类，提供全局的消息订阅、通知功能。可类比Event事件，但其与事件又大不相同。Messenger的使用相对于事件是极为自由的。首先，他不关心注册的对象，其次不在乎调用者，第三不关心发送的内容。也就是说任何对象都可以接收消息、任何对象都可以发送消息、任何对象都可以作为消息的内容被发送。其本质是一个灵活的全局委托，供松耦合的结构交换信息。</p>
 <p>有了Messnger的存在，配合MVVM模式，可以更大程度的解耦ViewModel与ViewModel之间、View与ViewModel的依赖，达到调用者与使用者互不知情的情况下进行通信的效果。</p>
 <p>常用写法如下：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 消息订阅，此处“token”为消息接收识别的令牌，num则为消息内容</span></span><br><span class="line">Messenger.Default.Register&lt;<span class="built_in">int</span>&gt;(<span class="string">&quot;token&quot;</span>, num =&gt;</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="comment">// do something</span></span><br><span class="line">                                &#125;);</span><br><span class="line"><span class="comment">// 消息发送，参数分别为消息内容和识别令牌</span></span><br><span class="line">Messenger.Default.Send&lt;<span class="built_in">int</span>&gt;(<span class="number">20</span>, <span class="string">&quot;token&quot;</span>);</span><br><span class="line"><span class="comment">// 注销消息                </span></span><br><span class="line">Messenger.Default.Unregister&lt;<span class="built_in">int</span>&gt;(<span class="string">&quot;token&quot;</span>);</span><br></pre></td></tr></table></figure>
 <p>以上是全局Messenger的使方法，使用的是Messenger的Default静态对象，全局有效。如果需要在特定范围内使用，也可根据场景自行创建对象来使用。</p>
 <p>但是使用的时候需要注意的是，在结束后记得注销消息，否则也可能会产生逻辑上的错误。可以考虑配合ViewModelBase的Cleanup()函数进行自动注销（实际上ViewModelBase中已经写了对MessengerInstance的注销逻辑）。使用Messenger的好处是减少了对象之间消息传递的强依赖，但是坏处是可能会使我们的代码不容易读懂和调试。所以在使用的时候也不可过度滥用，权衡评判之后再下手不迟。</p>
-<h4 id="SImpleIoc"><a class="header-anchor" href="#SImpleIoc">null</a>SImpleIoc</h4>
+<h4 id="SImpleIoc"><a class="header-anchor" href="#SImpleIoc"></a>SImpleIoc</h4>
 <p>SimpleIoc是MvvmLight提供的一个简单的IOC容器。ViewModelLocator中默认的实例创建方式就是通过SimmpleIoc注入实现。SimpleIoc实现了注册、注销、获取实例等基础的IOC容器功能，创建对象时IOC容器可以根据注册对各构造函数参数进行自动装配，用于解耦用户创建实例时的相互依赖。此处依赖注入是针对性的优化功能，但不是必须存在的，即便不适用IOC创建对象，直接new一个需要的实例效果并没有什么不同。</p>
 <p>通过上面ViewModelLocator的代码可以看到，关于IOC的使用部分，其实是包含了两部分。首先是<code>ServiceLocator</code>,其次才是<code>SimpleIoc</code>。ServiceLocator是一个来自CommonServiceLocator库的IOC中继器，用于调用触发IOC框架的功能。SImpleIoc类正是继承了CommonServiceLocator中的<code>IServiceLocator</code>接口，所以其可以作为参数设置ServiceLocator的实际使用框架实例。在上面的代码中，实际上这两种写法是等效的：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServiceLocator.Current.GetInstance&lt;AppViewModel&gt;();</span><br><span class="line">SimpleIoc.Default.GetInstance&lt;AppViewModel&gt;();</span><br></pre></td></tr></table></figure>
@@ -229,7 +229,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MVVM%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">nullMVVM模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MvvmLight"><span class="toc-number">2.</span> <span class="toc-text">nullMvvmLight</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MvvmLight%E7%9A%84%E6%9E%84%E6%88%90"><span class="toc-number">2.1.</span> <span class="toc-text">nullMvvmLight的构成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelBase"><span class="toc-number">2.1.1.</span> <span class="toc-text">nullViewModelBase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelLocator"><span class="toc-number">2.1.2.</span> <span class="toc-text">nullViewModelLocator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Messenger"><span class="toc-number">2.1.3.</span> <span class="toc-text">nullMessenger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SImpleIoc"><span class="toc-number">2.1.4.</span> <span class="toc-text">nullSImpleIoc</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MVVM%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">MVVM模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MvvmLight"><span class="toc-number">2.</span> <span class="toc-text">MvvmLight</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MvvmLight%E7%9A%84%E6%9E%84%E6%88%90"><span class="toc-number">2.1.</span> <span class="toc-text">MvvmLight的构成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelBase"><span class="toc-number">2.1.1.</span> <span class="toc-text">ViewModelBase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ViewModelLocator"><span class="toc-number">2.1.2.</span> <span class="toc-text">ViewModelLocator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Messenger"><span class="toc-number">2.1.3.</span> <span class="toc-text">Messenger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SImpleIoc"><span class="toc-number">2.1.4.</span> <span class="toc-text">SImpleIoc</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

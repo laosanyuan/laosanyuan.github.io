@@ -10,12 +10,12 @@
     <meta name="baidu-site-verification" content="code-c6ersgmcTV" />
     <meta name="sogou_site_verification" content="RbqtFq8FjJ"/>
     <meta name="msvalidate.01" content="8566932EE034C98204A72F34E44A503A" />
-    <meta name="description" content="**解构(Deconstruct)**是C#7.0中增加的新用法。解构的作用是拆解一个复杂的数据结构为相对原始数据简单的部分，用以后续的使用场景。简单的说，就是在满足使用的基础上删繁就简，使我们写出的代码更优雅、便捷。解构功能配合模式匹配使用效果极佳。 null类的解构 在常见的使用场景中，面对复杂对象的比较或者其他使用时，往往我们并不需要使用整个对象，仅仅会用到其包含的一部分内容。即使出于安全考">
+    <meta name="description" content="**解构(Deconstruct)**是C#7.0中增加的新用法。解构的作用是拆解一个复杂的数据结构为相对原始数据简单的部分，用以后续的使用场景。简单的说，就是在满足使用的基础上删繁就简，使我们写出的代码更优雅、便捷。解构功能配合模式匹配使用效果极佳。 类的解构 在常见的使用场景中，面对复杂对象的比较或者其他使用时，往往我们并不需要使用整个对象，仅仅会用到其包含的一部分内容。即使出于安全考虑，很多">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C#中的解构(Deconstruct)">
 <meta property="og:url" content="https://laosanyuan.github.io/2021/12/28/C-%E4%B8%AD%E7%9A%84%E8%A7%A3%E6%9E%84-Deconstruct/index.html">
 <meta property="og:site_name" content="刀不卷刃">
-<meta property="og:description" content="**解构(Deconstruct)**是C#7.0中增加的新用法。解构的作用是拆解一个复杂的数据结构为相对原始数据简单的部分，用以后续的使用场景。简单的说，就是在满足使用的基础上删繁就简，使我们写出的代码更优雅、便捷。解构功能配合模式匹配使用效果极佳。 null类的解构 在常见的使用场景中，面对复杂对象的比较或者其他使用时，往往我们并不需要使用整个对象，仅仅会用到其包含的一部分内容。即使出于安全考">
+<meta property="og:description" content="**解构(Deconstruct)**是C#7.0中增加的新用法。解构的作用是拆解一个复杂的数据结构为相对原始数据简单的部分，用以后续的使用场景。简单的说，就是在满足使用的基础上删繁就简，使我们写出的代码更优雅、便捷。解构功能配合模式匹配使用效果极佳。 类的解构 在常见的使用场景中，面对复杂对象的比较或者其他使用时，往往我们并不需要使用整个对象，仅仅会用到其包含的一部分内容。即使出于安全考虑，很多">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-27T16:26:02.000Z">
 <meta property="article:modified_time" content="2022-04-27T16:01:44.750Z">
@@ -111,7 +111,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">null类的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%83%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">null元组的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">null记录的解构</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">类的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%83%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">元组的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">记录的解构</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -156,7 +156,7 @@
 
   <div class="content" itemprop="articleBody">
     <p>**解构(Deconstruct)**是C#7.0中增加的新用法。解构的作用是拆解一个复杂的数据结构为相对原始数据简单的部分，用以后续的使用场景。简单的说，就是在满足使用的基础上删繁就简，使我们写出的代码更优雅、便捷。解构功能配合模式匹配使用效果极佳。</p>
-<h2 id="类的解构"><a class="header-anchor" href="#类的解构">null</a>类的解构</h2>
+<h2 id="类的解构"><a class="header-anchor" href="#类的解构"></a>类的解构</h2>
 <p>在常见的使用场景中，面对复杂对象的比较或者其他使用时，往往我们并不需要使用整个对象，仅仅会用到其包含的一部分内容。即使出于安全考虑，很多时候我们也不希望向无关的处理暴露太多的数据。这个时候，很多东西又不得不依赖，写出的代码往往就会比较臃肿。所以给人的感觉就像我想知道一个人的身高体重，却不得不先拿到他的户口本知道所有信息。这样既不优雅又不安全。解构的出现就很好的解决了这个问题。</p>
 <p>举个例子。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">User</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Age &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Sex &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Address &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -181,12 +181,12 @@
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Deconstruct</span>(<span class="params"><span class="keyword">out</span> <span class="built_in">string</span> name, <span class="keyword">out</span> <span class="built_in">string</span> sex, <span class="keyword">out</span> <span class="built_in">int</span> age</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    name = Name;</span><br><span class="line">    sex = Sex;</span><br><span class="line">    age = Age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以的原因是因为这个重载列表中具有三个参数，参数列表的数量发生了变化。但是假如重载的数量还是两个没变，但是参数的类型发生了变化，这样写就是错误的：</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Deconstruct</span>(<span class="params"><span class="keyword">out</span> <span class="built_in">bool</span> isBoy, <span class="keyword">out</span> <span class="built_in">int</span> age</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    isBoy = Sex.Equals(<span class="string">&quot;男&quot;</span>);</span><br><span class="line">    age = Age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="元组的解构"><a class="header-anchor" href="#元组的解构">null</a>元组的解构</h2>
+<h2 id="元组的解构"><a class="header-anchor" href="#元组的解构"></a>元组的解构</h2>
 <p>元组因为没有参数名称，并且也不需要预先定义内容，所提它的解构就不用像类的解构一样预处理一部分逻辑了。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tuple = <span class="keyword">new</span> Tuple&lt;<span class="built_in">string</span>, <span class="built_in">int</span>, <span class="built_in">bool</span>&gt;(<span class="string">&quot;xiaoming&quot;</span>, <span class="number">9</span>, <span class="literal">true</span>);</span><br><span class="line">(<span class="built_in">string</span> name, <span class="built_in">int</span> age,<span class="built_in">bool</span> isBoy) = tuple;</span><br></pre></td></tr></table></figure>
 <p>仅仅需要按照元组的元素列表组装解构就可以了。但是，也有注意事项，那就是解构必须包含所解构元素的按顺序的全部元素。即便有的参数是不需要的，也应以弃元_形式占位处理。</p>
 <p>如此看来，元组的解构处理命名之外似乎意义不大，这种情况还不如直接使用ValueTuple满足需求。</p>
-<h2 id="记录的解构"><a class="header-anchor" href="#记录的解构">null</a>记录的解构</h2>
+<h2 id="记录的解构"><a class="header-anchor" href="#记录的解构"></a>记录的解构</h2>
 <p>C#9.0之后又添加了新的数据类型记录(Record)，可以将其理解成一种介于元组和类之间的一种数据结构。</p>
 <p>对于记录的解构，也与其自身的定位类似，既可以使用类的解构方法又可以使用元组的解构方法。实际生产中，如果使用类的解构形式，那么与类解构一样，需预先写好解构函数；如采用元组的解构形式，那么也需在解构过程中保证元素列表的顺序和数量与记录本身一一对应，好处是不用在记录中写解构函数。</p>
 
@@ -220,7 +220,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">null类的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%83%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">null元组的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">null记录的解构</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">类的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%83%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">元组的解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E7%9A%84%E8%A7%A3%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">记录的解构</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
